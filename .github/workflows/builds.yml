@@ -25,16 +25,16 @@ jobs:
       - name: Get Version Code and Version Name
         id: version
         run: |
-          echo "::set-output name=version_code::$(./gradlew -q printVersionCode)"
-          echo "::set-output name=version_name::$(./gradlew -q printVersionName)"
+          echo "version_code=$(./gradlew -q printVersionCode)" >> $GITHUB_ENV
+          echo "version_name=$(./gradlew -q printVersionName)" >> $GITHUB_ENV
 
       - name: Build APK and AAB with Gradle
         run: ./gradlew assembleRelease bundleRelease
 
       - name: Rename APK and AAB
         run: |
-          mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/app-release-${{ steps.version.outputs.version_name }}-${{ steps.version.outputs.version_code }}-unsigned.apk
-          mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/app-release-${{ steps.version.outputs.version_name }}-${{ steps.version.outputs.version_code }}.aab
+          mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/app-release-${{ env.version_name }}-${{ env.version_code }}-unsigned.apk
+          mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/app-release-${{ env.version_name }}-${{ env.version_code }}.aab
 
       - name: Upload APK
         uses: actions/upload-artifact@v2
