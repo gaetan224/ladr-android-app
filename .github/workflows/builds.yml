@@ -50,12 +50,12 @@ jobs:
           -storepass ${{ secrets.STORE_PASSWORD }} \
           -keypass ${{ secrets.KEY_PASSWORD }} \
           -signedjar app/build/outputs/bundle/release/app-release.aab \
-          app/build/outputs/bundle/release/app-release-signed.aab ${{ secrets.KEY_ALIAS }}
+          app/build/outputs/bundle/release/app-release.aab ${{ secrets.KEY_ALIAS }}
 
       - name: Rename APK and AAB
         run: |
-          mv app/build/outputs/apk/release/app-release-signed.apk app/build/outputs/apk/release/app-release-${{ env.version_name }}-${{ env.version_code }}-unsigned.apk
-          mv app/build/outputs/bundle/release/app-release-signed.aab app/build/outputs/bundle/release/app-release-${{ env.version_name }}-${{ env.version_code }}.aab
+          mv app/build/outputs/apk/release/app-release-signed.apk app/build/outputs/apk/release/app-release-${{ env.version_name }}-${{ env.version_code }}.apk
+          mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/app-release-${{ env.version_name }}-${{ env.version_code }}.aab
 
       - name: Upload artefacts
         uses: actions/upload-artifact@v3.1.2
