@@ -42,7 +42,7 @@ jobs:
           -storepass ${{ secrets.STORE_PASSWORD }} \
           -keypass ${{ secrets.KEY_PASSWORD }} \
           -signedjar app/build/outputs/apk/release/app-release-signed.apk \
-          app/build/outputs/apk/release/app-release-unsigned.apk ${{ secrets.KEY_ALIAS }}
+          app/build/outputs/apk/release/app-release-unsigned.apk ${{ secrets.KEY_ALIAS_APK }}
 
       - name: Sign AAB
         run: |
@@ -50,7 +50,7 @@ jobs:
           -storepass ${{ secrets.STORE_PASSWORD }} \
           -keypass ${{ secrets.KEY_PASSWORD }} \
           -signedjar app/build/outputs/bundle/release/app-release.aab \
-          app/build/outputs/bundle/release/app-release-signed.aab ${{ secrets.KEY_ALIAS }}
+          app/build/outputs/bundle/release/app-release-signed.aab ${{ secrets.KEY_ALIAS_AAB }}
 
       - name: Rename APK and AAB
         run: |
