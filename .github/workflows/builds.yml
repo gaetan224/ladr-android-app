@@ -37,13 +37,13 @@ jobs:
 
       - name: Move Test Report HTML files
         run: |
-          mkdir -p doc/${{ github.run_number }}/
-          cp -R $HOME/test-reports/* doc/${{ github.run_number }}/
+          mkdir -p docs/${{ github.run_number }}/
+          cp -R $HOME/test-reports/* docs/${{ github.run_number }}/
       - name: Commit and Push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add doc
+          git add docs
           git commit -m "Update test report"
           git push
 
