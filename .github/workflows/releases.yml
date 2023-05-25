@@ -1,4 +1,4 @@
-name: Builds Android apk and aab
+name: Release Android apk and aab
 
 on:
   workflow_dispatch:
