@@ -30,17 +30,18 @@ jobs:
           mkdir -p $HOME/test-reports
           mv app/build/reports/tests/testDebugUnitTest/* $HOME/test-reports
 
-      - name: Copy Test Report HTML files to gh-pages branch
+      - name: checkout on gh-pages branch
         uses: actions/checkout@v3
         with:
           ref: gh-pages
+
       - name: Move Test Report HTML files
         run: |
           mkdir -p doc/${{ github.run_number }}/
           cp -R $HOME/test-reports/* doc/${{ github.run_number }}/
       - name: Commit and Push changes
         run: |
-          git add test-report
+          git add doc
           git commit -m "Update test report"
           git push origin gh-pages
 
