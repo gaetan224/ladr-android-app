@@ -39,7 +39,7 @@ jobs:
         run: |
           mkdir -p docs/${{ github.run_number }}/
           cp -R $HOME/test-reports/* docs/${{ github.run_number }}/
-          echo "<a href="${{ github.run_number }}/index.html">${{ github.run_number }}</a>" >> docs/index.html
+          echo "<a href="${{ github.run_number }}/index.html">${{ github.run_number }}</a><br>" >> docs/index.html
       - name: Commit and Push changes
         run: |
           git config --local user.email "action@github.com"
