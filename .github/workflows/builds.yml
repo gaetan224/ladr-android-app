@@ -41,6 +41,8 @@ jobs:
           cp -R $HOME/test-reports/* doc/${{ github.run_number }}/
       - name: Commit and Push changes
         run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add doc
           git commit -m "Update test report"
           git push origin gh-pages
