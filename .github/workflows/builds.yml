@@ -45,7 +45,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git add doc
           git commit -m "Update test report"
-          git push origin gh-pages
+          git push
 
   build:
     needs: tests
