@@ -30,7 +30,7 @@ jobs:
           ref: gh-pages
       - name: Move Test Report HTML files
         run: |
-          mkdir -p test-report
+          mkdir -p doc/${{ github.run_number }}/
           cp -R app/build/reports/tests/testDebugUnitTest/* doc/${{ github.run_number }}/
       - name: Commit and Push changes
         run: |
