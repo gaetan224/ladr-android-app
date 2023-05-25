@@ -31,7 +31,7 @@ jobs:
       - name: Move Test Report HTML files
         run: |
           mkdir -p test-report
-          cp -R app/build/reports/tests/testDebugUnitTest/* test-report/${{ github.run_number }}/
+          cp -R app/build/reports/tests/testDebugUnitTest/* doc/${{ github.run_number }}/
       - name: Commit and Push changes
         run: |
           git add test-report
