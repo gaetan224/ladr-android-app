@@ -51,41 +51,24 @@ jobs:
 
       - name: Rename APK and AAB
         run: |
-          mv app/build/outputs/apk/release/app-release-signed.apk app/build/outputs/apk/release/app-release-${{ env.version_name }}-${{ env.version_code }}.apk
-          mv app/build/outputs/bundle/release/app-release-signed.aab app/build/outputs/bundle/release/app-release-${{ env.version_name }}-${{ env.version_code }}.aab
+          mv app/build/outputs/apk/release/app-release-signed.apk app/build/outputs/apk/release/app-release-${VERSION}.apk
+          mv app/build/outputs/bundle/release/app-release-signed.aab app/build/outputs/bundle/release/app-release-${VERSION}.aab
 
-      - name: Configure AWS credentials
-        run: |
-          mkdir -p $HOME/.aws/
-          echo "[default]" >> $HOME/.aws/credentials
-          echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $HOME/.aws/credentials
-          echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $HOME/.aws/credentials
+      - uses: keithweaver/aws-s3-github-action@v1.0.0
+        with:
+          source: app/build/outputs/apk/release/app-release-${VERSION}.apk
+          destination: s3://${{ env.AWS_BUCKET_NAME }}/android/apk/releases/${VERSION}/app-release-${VERSION}.apk
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ env.AWS_REGION }}
 
-      - name: Install AWS CLI
-        run: |
-          sudo apt-get -y install awscli
-
-      - name: Push APK to CodeArtifact
-        run: |
-          aws codeartifact push-package-version \
-            --domain ${{ env.AWS_CODEARTEFACT_DOMAIN }} \
-            --repository ${{ env.AWS_CODEARTEFACT_REPO }} \
-            --package  app-release-${{ needs.build.outputs.version_name }}.apk \
-            --format zip \
-            --namespace mobile-app \
-            --package-version ${{ needs.build.outputs.version_name }} \
-            --source app/build/outputs/apk/release/app-release-${{ needs.build.outputs.version_name }}.apk
-
-      - name: Push AAB to CodeArtifact
-        run: |
-          aws codeartifact push-package-version \
-            --domain ${{ env.AWS_CODEARTEFACT_DOMAIN }} \
-            --repository ${{ env.AWS_CODEARTEFACT_REPO }} \
-            --package app-release-${{ needs.build.outputs.version_name }}.aab \
-            --format zip \
-            --namespace mobile-app \
-            --package-version ${{ needs.build.outputs.version_name }} \
-            --source app/build/outputs/bundle/release/app-release-${{ needs.build.outputs.version_name }}.aab
+      - uses: keithweaver/aws-s3-github-action@v1.0.0
+        with:
+          source: app/build/outputs/bundle/release/app-release-${VERSION}.aab
+          destination: s3://${{ env.AWS_BUCKET_NAME }}/android/aab/releases/${VERSION}/app-release-${VERSION}.aab
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ env.AWS_REGION }}
 
       - name: Update Version
         run: |
