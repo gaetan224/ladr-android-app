@@ -72,7 +72,6 @@ jobs:
       - name: Update Version
         run: |
           TAG_NAME=v${VERSION}
-          ./gradlew setVersion -Pversion=$VERSION
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -a -m "Update version in build.gradle to $VERSION"
