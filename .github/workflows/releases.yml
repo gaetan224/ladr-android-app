@@ -53,8 +53,10 @@ jobs:
         run: |
           mv app/build/outputs/apk/release/app-release-signed.apk app/build/outputs/apk/release/app-release-${VERSION}.apk
           mv app/build/outputs/bundle/release/app-release-signed.aab app/build/outputs/bundle/release/app-release-${VERSION}.aab
+          echo "region=${{ env.AWS_REGION }}, bucket=${{ env.AWS_BUCKET_NAME }}, version=${VERSION}"
 
-      - uses: keithweaver/aws-s3-github-action@v1.0.0
+      - name: Publish apk to S3
+        uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           source: app/build/outputs/apk/release/app-release-${VERSION}.apk
           destination: s3://${{ env.AWS_BUCKET_NAME }}/android/apk/releases/${VERSION}/app-release-${VERSION}.apk
@@ -62,7 +64,8 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: ${{ env.AWS_REGION }}
 
-      - uses: keithweaver/aws-s3-github-action@v1.0.0
+      - name: Publish aab to S3
+        uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           source: app/build/outputs/bundle/release/app-release-${VERSION}.aab
           destination: s3://${{ env.AWS_BUCKET_NAME }}/android/aab/releases/${VERSION}/app-release-${VERSION}.aab
