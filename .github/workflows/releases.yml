@@ -54,11 +54,19 @@ jobs:
           mv app/build/outputs/apk/release/app-release-signed.apk app/build/outputs/apk/release/app-release-${VERSION}.apk
           mv app/build/outputs/bundle/release/app-release-signed.aab app/build/outputs/bundle/release/app-release-${VERSION}.aab
 
-      - name: Install and configure AWS CLI
+      - name: Install AWS CLI version 2
         run: |
-          # Install the AWS CLI
-          sudo apt-get install -y awscli
-        
+          # Download the AWS CLI version 2 installation bundle
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+          # Extract the installation bundle
+          unzip awscliv2.zip
+
+          # Install the AWS CLI version 2
+          sudo ./aws/install
+
+      - name: Configure AWS CLI
+        run: |
           # Configure the AWS CLI with your credentials
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
