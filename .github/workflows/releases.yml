@@ -61,7 +61,7 @@ jobs:
           destination_dir: /android/apk/releases/${VERSION}/app-release-${VERSION}.apk
           aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_bucket: ${{ secrets.AWS_BUCKET_NAME }}
+          aws_bucket: ${{ vars.AWS_BUCKET_NAME }}
 
       - name: Publish aab to S3
         uses: shallwefootball/s3-upload-action@master
@@ -70,7 +70,7 @@ jobs:
           destination_dir: /android/aab/releases/${VERSION}/app-release-${VERSION}.aab
           aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_bucket: ${{ secrets.AWS_BUCKET_NAME }}
+          aws_bucket: ${{ vars.AWS_BUCKET_NAME }}
 
       - name: Update Version
         run: |
