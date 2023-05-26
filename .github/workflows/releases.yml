@@ -54,23 +54,24 @@ jobs:
           mv app/build/outputs/apk/release/app-release-signed.apk app/build/outputs/apk/release/app-release-${VERSION}.apk
           mv app/build/outputs/bundle/release/app-release-signed.aab app/build/outputs/bundle/release/app-release-${VERSION}.aab
 
-      - name: Publish apk to S3
-        uses: shallwefootball/s3-upload-action@master
-        with:
-          source_dir: ./app/build/outputs/apk/release/app-release-${VERSION}.apk
-          destination_dir: /android/apk/releases/${VERSION}/app-release-${VERSION}.apk
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_bucket: ${{ vars.AWS_BUCKET_NAME }}
+      - name: Install and configure AWS CLI
+        run: |
+          # Install the AWS CLI
+          sudo apt-get install -y awscli
+        
+          # Configure the AWS CLI with your credentials
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ${{ secrets.AWS_REGION }}
 
-      - name: Publish aab to S3
-        uses: shallwefootball/s3-upload-action@master
-        with:
-          source_dir: ./app/build/outputs/bundle/release/app-release-${VERSION}.aab
-          destination_dir: /android/aab/releases/${VERSION}/app-release-${VERSION}.aab
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_bucket: ${{ vars.AWS_BUCKET_NAME }}
+      - name: Publish apk and aab to S3
+        run: |
+          # upload apk file to the S3 bucket
+          aws s3 cp app/build/outputs/apk/release/app-release-${VERSION}.apk \
+          s3://${{ vars.AWS_BUCKET_NAME }}/android/apk/releases/${VERSION}/app-release-${VERSION}.apk \
+          aws s3 cp  app/build/outputs/bundle/release/app-release-${VERSION}.aab \
+          s3://${{ vars.AWS_BUCKET_NAME }}/android/aab/releases/${VERSION}/app-release-${VERSION}.aab
+          
 
       - name: Update Version
         run: |
