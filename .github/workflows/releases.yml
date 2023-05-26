@@ -53,38 +53,43 @@ jobs:
         run: |
           mv app/build/outputs/apk/release/app-release-signed.apk app/build/outputs/apk/release/app-release-${VERSION}.apk
           mv app/build/outputs/bundle/release/app-release-signed.aab app/build/outputs/bundle/release/app-release-${VERSION}.aab
-          echo "region=${{ vars.AWS_REGION }}, bucket=${{ vars.AWS_BUCKET_NAME }}, version=${VERSION}"
-
-      - name: Publish apk to S3
-        uses: keithweaver/aws-s3-github-action@v1.0.0
-        with:
-          source: ./app/build/outputs/apk/release/app-release-${VERSION}.apk
-          destination: s3://${{ vars.AWS_BUCKET_NAME }}/android/apk/releases/${VERSION}/app-release-${VERSION}.apk
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: ${{ vars.AWS_REGION }}
-
-      - name: Publish aab to S3
-        uses: keithweaver/aws-s3-github-action@v1.0.0
-        with:
-          source: ./app/build/outputs/bundle/release/app-release-${VERSION}.aab
-          destination: s3://${{ vars.AWS_BUCKET_NAME }}/android/aab/releases/${VERSION}/app-release-${VERSION}.aab
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: ${{ vars.AWS_REGION }}
-
-      - name: Update Version
-        run: |
-          TAG_NAME=v${VERSION}
-          ./gradlew setVersion -Pversion=$VERSION
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -a -m "Update version in build.gradle to $VERSION"
-          git tag $TAG_NAME -m "Version $VERSION"
-          git push origin $TAG_NAME
 
       - name: Upload artefacts
         uses: actions/upload-artifact@v3.1.2
         with:
           name: outputs
           path: app/build/outputs/
+#
+#      - name: Publish apk to S3
+#        uses: keithweaver/aws-s3-github-action@v1.0.0
+#        with:
+#          source: ./app/build/outputs/apk/release/app-release-${VERSION}.apk
+#          destination: s3://${{ vars.AWS_BUCKET_NAME }}/android/apk/releases/${VERSION}/app-release-${VERSION}.apk
+#          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws_region: ${{ vars.AWS_REGION }}
+#
+#      - name: Publish aab to S3
+#        uses: keithweaver/aws-s3-github-action@v1.0.0
+#        with:
+#          source: ./app/build/outputs/bundle/release/app-release-${VERSION}.aab
+#          destination: s3://${{ vars.AWS_BUCKET_NAME }}/android/aab/releases/${VERSION}/app-release-${VERSION}.aab
+#          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws_region: ${{ vars.AWS_REGION }}
+#
+#      - name: Update Version
+#        run: |
+#          TAG_NAME=v${VERSION}
+#          ./gradlew setVersion -Pversion=$VERSION
+#          git config --local user.email "action@github.com"
+#          git config --local user.name "GitHub Action"
+#          git commit -a -m "Update version in build.gradle to $VERSION"
+#          git tag $TAG_NAME -m "Version $VERSION"
+#          git push origin $TAG_NAME
+#
+#      - name: Upload artefacts
+#        uses: actions/upload-artifact@v3.1.2
+#        with:
+#          name: outputs
+#          path: app/build/outputs/
