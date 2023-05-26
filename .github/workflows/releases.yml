@@ -65,10 +65,8 @@ jobs:
       - name: Publish apk and aab to S3
         run: |
           # upload apk file to the S3 bucket
-          aws s3 cp app/build/outputs/apk/release/app-release-${VERSION}.apk \
-          s3://${{ vars.AWS_BUCKET_NAME }}/android/apk/releases/${VERSION}/app-release-${VERSION}.apk \
-          aws s3 cp  app/build/outputs/bundle/release/app-release-${VERSION}.aab \
-          s3://${{ vars.AWS_BUCKET_NAME }}/android/aab/releases/${VERSION}/app-release-${VERSION}.aab
+          aws s3 cp app/build/outputs/apk/release/app-release-${VERSION}.apk s3://${{ vars.AWS_BUCKET_NAME }}/android/apk/releases/${VERSION}/app-release-${VERSION}.apk
+          aws s3 cp app/build/outputs/bundle/release/app-release-${VERSION}.aab s3://${{ vars.AWS_BUCKET_NAME }}/android/aab/releases/${VERSION}/app-release-${VERSION}.aab
 
 
       - name: Update Version
