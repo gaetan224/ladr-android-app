@@ -58,7 +58,7 @@ jobs:
       - name: Publish apk to S3
         uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
-          source: app/build/outputs/apk/release/app-release-${VERSION}.apk
+          source: ./app/build/outputs/apk/release/app-release-${VERSION}.apk
           destination: s3://${{ vars.AWS_BUCKET_NAME }}/android/apk/releases/${VERSION}/app-release-${VERSION}.apk
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -67,7 +67,7 @@ jobs:
       - name: Publish aab to S3
         uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
-          source: app/build/outputs/bundle/release/app-release-${VERSION}.aab
+          source: ./app/build/outputs/bundle/release/app-release-${VERSION}.aab
           destination: s3://${{ vars.AWS_BUCKET_NAME }}/android/aab/releases/${VERSION}/app-release-${VERSION}.aab
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
